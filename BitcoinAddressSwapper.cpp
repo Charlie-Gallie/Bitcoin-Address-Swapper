@@ -25,7 +25,8 @@ string WaitForClipboardUpdate(string oldValue) {
 			CloseClipboard();
 		}
 		Sleep(1);
-		//Not having a delay breaks the clipboard functionality for some reason
+		//Not having a delay breaks the clipboard functionality for some reason.
+		//I think it's from GlobalLock()
 	}
 }
 
