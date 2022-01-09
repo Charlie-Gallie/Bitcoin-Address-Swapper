@@ -6,7 +6,7 @@
 using namespace std;
 
 string WaitForClipboardUpdate(string oldValue) {
-	//A lot of nesting here, could be worse.
+	//A lot of nesting here, but I'm not sure how to reduce it.
 	for (;;) { //This could get stuck in an infinite loop by a value being invalid but - I'm not worried for a proof-of-concept.
 		if (OpenClipboard(NULL)) {
 			if (IsClipboardFormatAvailable(CF_TEXT)) { //Confirms the data in the clipboard is plain text.
